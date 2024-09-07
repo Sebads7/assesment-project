@@ -1,5 +1,3 @@
-// src/pages/Home.tsx
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -31,17 +29,19 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center p-4">
-      <h1 className="text-3xl font-bold py-10 text-center">Country List</h1>
+      <h1 className="text-3xl font-bold mt-20 py-10 text-center">
+        Country List
+      </h1>
 
-      <ul className="w-[70rem] overflow-y-auto h-[30rem] px-20">
+      <ul className="xs:w-full  lg:w-[70rem] border overflow-y-auto h-[30rem]  shadow-sm lg:px-20">
         {countries.map((country) => (
           <li
             key={country.countryCode}
-            className="w-full py-5 my-2 border text-center"
+            className="py-5 bg-gray-100  hover:bg-blue-300 hover:text-white w-[20rem] my-5  rounded-md shadow-sm flex items-center justify-center mx-auto  gap-2  "
           >
             <Link
               to={`/country/${country.countryCode}`}
-              className="text-blue-500 hover:underline"
+              className=" hover:underline"
             >
               {country.name}
             </Link>

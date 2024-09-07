@@ -10,19 +10,18 @@ interface BorderCountry {
   officialName: string;
   countryCode: string;
   region: string;
-  borders: any;
+  borders: ["string"];
 }
 
 interface CountryInfo {
   borderCountries: BorderCountry[];
-  populationData: any;
+  populationData: string[];
 }
 
 interface FlagData {
   name: string;
   flag: string;
   iso2: string;
-  iso3: string;
 }
 
 const fetchFlagData = async (): Promise<FlagData[]> => {
@@ -51,18 +50,20 @@ const CountryPage: React.FC = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching country info:", error);
-        setCountryInfo(null); // Handle error by setting countryInfo to null
+        setCountryInfo(null);
       }
     };
 
     const fetchData = async () => {
       try {
         const flags = await fetchFlagData();
+        if (!flags) {
+          setFlagData([]);
+        }
         setFlagData(flags);
         fetchCountryInfo();
       } catch (error) {
         console.error("Error fetching data:", error);
-        setFlagData([]);
         setLoading(false);
       }
     };
@@ -72,41 +73,60 @@ const CountryPage: React.FC = () => {
 
   return (
     <div className="xs:px-10 md:px-20 py-20 w-full">
-      <h1 className="text-2xl font-bold my-4 text-center">
-        Country Information
+      <h1 className="text-2xl font-bold mt-20 my-4 text-center">
+        List of Border Countries for {countryCode}
       </h1>
-      <h2 className="text-lg mt-4 text-center mb-4">Border Countries</h2>
+
       {loading ? (
-        <p className="text-center">Loading...</p>
+        <div className="relative flex flex-col gap-3 justify-center items-center py-20">
+          <p className="text-center font-bold">Loading</p>
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
       ) : (
         <div>
-          <ul className="gap-4  w-full flex flex-col justify-center items-center">
-            {countryInfo?.borderCountries.map((border) => {
-              const flag = flagData.find(
-                (flag) => flag.iso2 === border.countryCode
-              );
-              const flagUrl = flag ? flag.flag : "";
-
-              return (
-                <li
-                  key={border.countryCode}
-                  className="border h-20 px-6  rounded-md shadow-sm flex items-center gap-2 "
-                >
-                  <img
-                    src={flagUrl}
-                    alt={`${border.countryCode} flag`}
-                    className="w-8 h-5 mr-2"
-                  />
-                  <Link
-                    to={`/country/${border.countryCode}`}
-                    className="text-blue-500 hover:underline  "
+          {countryInfo && countryInfo?.borderCountries.length > 0 ? (
+            <ul className="gap-4 md:w-2/4 h-[30rem] overflow-y-auto py-5 border mx-auto flex flex-col justify-center items-center">
+              {countryInfo?.borderCountries.map((border) => {
+                const flag = flagData.find(
+                  (flag) => flag.iso2 === border.countryCode
+                );
+                const flagUrl = flag?.flag;
+                return (
+                  <li
+                    key={border.countryCode}
+                    className=" py-5 bg-gray-100  hover:bg-blue-300 hover:text-white xs:w-[15rem] lg:w-[20rem]  rounded-md shadow-sm flex items-center justify-center   gap-2 "
                   >
-                    {border.commonName} (Official: {border.officialName})
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                    {flagUrl && (
+                      <img
+                        src={flagUrl}
+                        alt={`${border.countryCode} flag`}
+                        className="w-8 h-5 mr-2"
+                      />
+                    )}
+
+                    <Link
+                      to={`/country/${countryCode}`}
+                      className=" hover:underline  w-10   "
+                    >
+                      {border.commonName}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-center  mx-auto w-[25rem] py-5 text-red-500 font-bold">
+              No border countries found
+            </p>
+          )}
+
           <div className="w-full flex mt-5 justify-center">
             <a
               className=" mt-4 border p-4 rounded-lg hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
