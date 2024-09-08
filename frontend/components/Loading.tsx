@@ -1,5 +1,3 @@
-import React from "react";
-
 const Loading = () => {
   return (
     <div className="relative flex flex-col gap-3 justify-center items-center py-20">
