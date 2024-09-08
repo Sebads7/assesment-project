@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import Loading from "../../components/Loading";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const VITE_FLAGS = import.meta.env.VITE_FLAGS_API_URL;
 
 interface BorderCountry {
@@ -78,21 +79,11 @@ const CountryPage: React.FC = () => {
       </h1>
 
       {loading ? (
-        <div className="relative flex flex-col gap-3 justify-center items-center py-20">
-          <p className="text-center font-bold">Loading</p>
-          <div
-            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
-          </div>
-        </div>
+        <Loading />
       ) : (
-        <div>
+        <div className="md:w-2/4 h-[30rem] overflow-y-auto  py-5 border mx-auto ">
           {countryInfo && countryInfo?.borderCountries.length > 0 ? (
-            <ul className="gap-4 md:w-2/4 h-[30rem] overflow-y-auto py-5 border mx-auto flex flex-col justify-center items-center">
+            <ul className="flex flex-col  items-center  gap-4 mt-5 xs:px-2 sm:px-10 xl:px-32  ">
               {countryInfo?.borderCountries.map((border) => {
                 const flag = flagData.find(
                   (flag) => flag.iso2 === border.countryCode
@@ -101,19 +92,20 @@ const CountryPage: React.FC = () => {
                 return (
                   <li
                     key={border.countryCode}
-                    className=" py-5 bg-gray-100  hover:bg-blue-300 hover:text-white xs:w-[15rem] lg:w-[20rem]  rounded-md shadow-sm flex items-center justify-center   gap-2 "
+                    className="flex items-center justify-center  py-4  bg-gray-100   hover:bg-blue-300 hover:text-white  rounded-md shadow-sm  gap-4 w-full  "
                   >
-                    {flagUrl && (
-                      <img
-                        src={flagUrl}
-                        alt={`${border.countryCode} flag`}
-                        className="w-8 h-5 mr-2"
-                      />
-                    )}
-
+                    <div className="w-2/5 flex justify-end ">
+                      {flagUrl && (
+                        <img
+                          src={flagUrl}
+                          alt={`${border.countryCode} flag`}
+                          className="w-8 h-5 "
+                        />
+                      )}
+                    </div>
                     <Link
-                      to={`/country/${countryCode}`}
-                      className=" hover:underline  w-10   "
+                      to={`/country/${border.countryCode}`}
+                      className=" hover:underline  w-2/5  flex items-center   gap-4"
                     >
                       {border.commonName}
                     </Link>
@@ -126,17 +118,16 @@ const CountryPage: React.FC = () => {
               No border countries found
             </p>
           )}
-
-          <div className="w-full flex mt-5 justify-center">
-            <a
-              className=" mt-4 border p-4 rounded-lg hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
-              href="/"
-            >
-              Return to Home Page
-            </a>
-          </div>
         </div>
       )}
+      <div className="w-full flex mt-5 justify-center">
+        <a
+          className=" mt-4 border p-4 rounded-lg hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
+          href="/"
+        >
+          Return to Home Page
+        </a>
+      </div>
     </div>
   );
 };
