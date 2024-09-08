@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Loading from "../../components/Loading";
+import Loading from "../components/Loading";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

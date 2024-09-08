@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <div className="relative flex flex-col gap-3 justify-center items-center py-20">
+    <div className="relative flex flex-col gap-3 justify-center items-center py-20 w-full ">
       <p className="text-center font-bold">Loading</p>
       <div
         className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import Loading from "../../components/Loading";
+import Loading from "../components/Loading";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const VITE_FLAGS = import.meta.env.VITE_FLAGS_API_URL;
@@ -92,20 +92,19 @@ const CountryPage: React.FC = () => {
                 return (
                   <li
                     key={border.countryCode}
-                    className="flex items-center justify-center  py-4  bg-gray-100   hover:bg-blue-300 hover:text-white  rounded-md shadow-sm  gap-4 w-full  "
+                    className="flex items-center  justify-center   py-4  bg-gray-100   hover:bg-blue-300 hover:text-white  rounded-md shadow-sm   gap-4 w-[25rem]     "
                   >
-                    <div className="w-2/5 flex justify-end ">
-                      {flagUrl && (
-                        <img
-                          src={flagUrl}
-                          alt={`${border.countryCode} flag`}
-                          className="w-8 h-5 "
-                        />
-                      )}
-                    </div>
+                    {flagUrl && (
+                      <img
+                        src={flagUrl}
+                        alt={`${border.countryCode} flag`}
+                        className="w-8 h-5 "
+                      />
+                    )}
+
                     <Link
                       to={`/country/${border.countryCode}`}
-                      className=" hover:underline  w-2/5  flex items-center   gap-4"
+                      className=" hover:underline min-w-14  "
                     >
                       {border.commonName}
                     </Link>
